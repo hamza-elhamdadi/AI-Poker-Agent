@@ -83,7 +83,6 @@ def handType(hand):
         print('has a royal flush')
         return ROYAL_FLUSH
         
-        
     if checkFlush(card_suits) and checkStraight(values):
         print('has a straight flush')
         return STRAIGHT_FLUSH
