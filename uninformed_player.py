@@ -85,7 +85,7 @@ def handType(hand):
     print(cards)
     
     if checkFlush(card_suits) and checkStraight(values):
-        if values[0] == 10:
+        if 10 in values[:3]:                    #TODO: NEEDS DEBUGGING
             print('has a royal flush')
             return ROYAL_FLUSH
         print('has a straight flush')
@@ -133,6 +133,7 @@ def setup_ai():
 if __name__ == '__main__':
     hands = [
         ['C7', 'S7', 'H7', 'D4', 'CK'],
+        ['C3', 'C4', 'H5', 'H6', 'D7'],
         ['C7', 'S7', 'H7', 'D7', 'CK'],
         ['C7', 'S7', 'H7', 'HK', 'CK'],
         ['HJ', 'HQ', 'HK', 'HA', 'HT']
