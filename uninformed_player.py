@@ -108,8 +108,15 @@ class UninformedPlayer(BasePokerPlayer):
     def declare_action(self, valid_actions, hole_card, round_state):
         hand = hole_card + round_state['community_card']
         print(hand)
-        handType(hand)
-        return valid_actions[1]['action']
+        type_of_hand = handType(hand)
+        threshold = type_of_hand*10
+        if round_state['pot'] < threshold:
+            desired_action = 'call'
+        for action in valid_actions:
+            if desired_action == action['action']:
+                return desired_action
+        # TODO: ADD FUNCTIONALITY FOR RAISING TO THRESHOLD (OTHERWISE FOLD OR CALL? NOT SURE EXACTLY)
+        return 'fold'
     
     def receive_game_start_message(self, game_info):
         pass
