@@ -57,14 +57,17 @@ def checkFlush(card_suits):
     counts = np.sort(counts)[::-1]
     return counts[0] == 5
 
+def checkStraightFromValue(start_value, values):
+    is_flush = True
+    for i in range(start_value+1, start_value+5):
+        if not i in values:
+            is_flush = False
+    return is_flush
+
 def checkStraight(values):
     for start_idx in range(3):
         start_value = values[start_idx]
-        is_flush = True
-        for i in range(start_value+1, start_value+5):
-            if not i in values:
-                is_flush = False
-        if is_flush:
+        if checkStraightFromValue(start_value, values):
             return True
     return False
 
@@ -76,10 +79,12 @@ def handType(hand):
 
     print(cards)
     
+    if checkFlush(card_suits) and checkStraightFromValue(10, values) and 10 in values:
+        print('has a royal flush')
+        return ROYAL_FLUSH
+        
+        
     if checkFlush(card_suits) and checkStraight(values):
-        if 10 in values[:3]:                    #TODO: NEEDS DEBUGGING
-            print('has a royal flush')
-            return ROYAL_FLUSH
         print('has a straight flush')
         return STRAIGHT_FLUSH
 
