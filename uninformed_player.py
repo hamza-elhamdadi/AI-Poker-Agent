@@ -132,6 +132,7 @@ def setup_ai():
 
 if __name__ == '__main__':
     hands = [
+        ['C7', 'S7', 'H7', 'D4', 'CK'],
         ['C7', 'S7', 'H7', 'D7', 'CK'],
         ['C7', 'S7', 'H7', 'HK', 'CK'],
         ['HJ', 'HQ', 'HK', 'HA', 'HT']
