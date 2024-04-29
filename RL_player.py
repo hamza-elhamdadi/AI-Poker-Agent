@@ -1,5 +1,11 @@
 # Jay's agent using Q-learning
-# TODO: CHANGE COPY FROM UNINFORMED PLAYER TO RL
+"""
+TODO:
+    - Gather full intel on state at each round
+    - Generate/Init Q-table
+    - Use state info to index Q-table
+    - Write Q-learning update function
+"""
 
 from pypokerengine.players import BasePokerPlayer
 from hand_type import handType
