@@ -65,6 +65,8 @@ def checkStraightFromValue(start_value, values):
     return is_flush
 
 def checkStraight(values):
+    if len(values) < 5:
+        return False
     for start_idx in range(3):
         start_value = values[start_idx]
         if checkStraightFromValue(start_value, values):
