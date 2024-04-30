@@ -8,12 +8,14 @@ class UninformedPlayer(BasePokerPlayer):
         print(hand)
         type_of_hand = handType(hand)
         threshold = type_of_hand*10
-        if round_state['pot'] < threshold:
-            desired_action = 'call'
         for action in valid_actions:
-            if desired_action == action['action']:
-                return desired_action
-        # TODO: ADD FUNCTIONALITY FOR RAISING TO THRESHOLD (OTHERWISE FOLD OR CALL? NOT SURE EXACTLY)
+            if round_state['pot']['main']['amount'] < threshold:
+                if 'raise' == action['action']:
+                    return 'raise'
+        for action in valid_actions:
+            if round_state['pot']['main']['amount'] <= threshold:
+                if 'call' == action['action']:
+                    return 'call'
         return 'fold'
     
     def receive_game_start_message(self, game_info):
