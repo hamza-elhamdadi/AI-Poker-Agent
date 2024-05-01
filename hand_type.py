@@ -31,24 +31,24 @@ def checkMatching(values):
     vals, counts = np.unique(values, return_counts=True)
     counts = np.sort(counts)[::-1]
     if counts[0] == 4:
-        print('has four of a kind')
+        # print('has four of a kind')
         return FOUR_OF_A_KIND
 
     if counts[0] == 3:
         if len(counts) > 1 and counts[1] == 2:
-            print('has a full house')
+            # print('has a full house')
             return FULL_HOUSE
-        print('has three of a kind')
+        # print('has three of a kind')
         return THREE_OF_A_KIND
 
     if counts[0] == 2:
         if len(counts) > 1 and counts[1] == 2:
-            print('has two pairs')
+            # print('has two pairs')
             return TWO_PAIRS
-        print('has a pair')
+        # print('has a pair')
         return PAIR
     
-    print(f'has high card: {np.max(vals)}')
+    # print(f'has high card: {np.max(vals)}')
     return HIGHCARD
 
 
@@ -77,22 +77,22 @@ def handType(hand):
     card_suits = [v[0] for v in cards]
     values = [v[1] for v in cards]
 
-    print(cards)
+    # print(cards)
     
     if checkFlush(card_suits) and checkStraightFromValue(10, values) and 10 in values:
-        print('has a royal flush')
+        # print('has a royal flush')
         return ROYAL_FLUSH
         
     if checkFlush(card_suits) and checkStraight(values):
-        print('has a straight flush')
+        # print('has a straight flush')
         return STRAIGHT_FLUSH
 
     if checkStraight(values):
-        print('has a straight')
+        # print('has a straight')
         return STRAIGHT
 
     if checkFlush(card_suits):
-        print('has a flush')
+        # print('has a flush')
         return FLUSH
 
     return checkMatching(values)

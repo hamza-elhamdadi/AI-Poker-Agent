@@ -5,16 +5,17 @@ class UninformedPlayer(BasePokerPlayer):
 
     def declare_action(self, valid_actions, hole_card, round_state):
         hand = hole_card + round_state['community_card']
-        print(hand)
+        # print(hand, round_state['community_card'])
         type_of_hand = handType(hand)
-        threshold = type_of_hand*10
-        print(round_state['pot']['main']['amount'],threshold)
+        # print(hand, type_of_hand)
+        threshold = type_of_hand*100
+        print(round_state['pot']['main']['amount'], threshold, hand, type_of_hand)
         for action in valid_actions:
-            if round_state['pot']['main']['amount'] < threshold:
+            if round_state['pot']['main']['amount'] < threshold or (round_state['street'] == 'preflop' and type_of_hand == 2):
                 if 'raise' == action['action']:
                     return 'raise'
         for action in valid_actions:
-            if round_state['pot']['main']['amount'] <= threshold:
+            if round_state['pot']['main']['amount'] <= threshold or (round_state['street'] == 'preflop' and type_of_hand == 1):
                 if 'call' == action['action']:
                     return 'call'
         return 'fold'
