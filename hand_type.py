@@ -96,4 +96,20 @@ def handType(hand):
         return FLUSH
 
     return checkMatching(values)
-    
+
+def handType_2cards(hand):
+    cards = [(h[0], valueMap[h[1]]) for h in hand]
+    cards = sorted(cards, key=lambda v: v[1])
+    card_suits = [v[0] for v in cards]
+    values = [v[1] for v in cards]
+    if values[0]==values[1]:
+        return 2
+    diff = values[1]-values[0]
+    same_suits = card_suits[0]==card_suits[1]
+    if diff > 0 and diff < 5:
+        if same_suits:
+            return 5
+        return 3
+    if same_suits:
+        return 4
+    return 1

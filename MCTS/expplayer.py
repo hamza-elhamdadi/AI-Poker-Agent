@@ -1,11 +1,26 @@
 from pypokerengine.players import BasePokerPlayer
-from hand_type import handType
 
+#from MCTS.MCTS_win_rate import win_rate
 
-class MCTSPlayer(BasePokerPlayer):
+class EXPPlayer(BasePokerPlayer):
+
+    def estimate_reward(self, action, hole_card, round_state):
+        import random
+        return random.random()
+        # TODO:Use MCTS to build a reward table
 
     def declare_action(self, valid_actions, hole_card, round_state):
-        pass
+        best_action = 'call'
+
+
+        hole = hole_card
+        card1 = hole[0]
+        rank1 = card1[0]
+
+
+        print(rank1)
+
+        return best_action
 
     def receive_game_start_message(self, game_info):
         pass
