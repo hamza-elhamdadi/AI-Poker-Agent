@@ -1,5 +1,7 @@
 from pypokerengine.utils.card_utils import estimate_hole_card_win_rate
 from pypokerengine.engine.card import Card
+import json
+from tqdm import tqdm
 
 import time
 
@@ -38,26 +40,43 @@ def map_cards_to_numbers(card_list):
             cards.append(mapped_card)
     return cards
 
-def win_rate(hole_card, community_card = None):
+def win_rate(hole_card, community_card = None, nb_simulation = 10000):
     num_community_cards = 0 if community_card == None else len(community_card)
     hole = map_cards_to_numbers(hole_card)
     community = map_cards_to_numbers(community_card)
-    value = estimate_hole_card_win_rate(1000 if num_community_cards < 4 else int(7e6),2, hole, community)
+    value = estimate_hole_card_win_rate(nb_simulation,2, hole, community)
     return value
 
-#example
-# start_time = time.time()
-#
-# hole_card = [Card(2, 14), Card(4, 14)]
-# community_card = [Card(8, 14), Card(16, 14), Card(16, 11)]
-# #value = estimate_hole_card_win_rate(300,2,hole_card, community_card)
-#
-# value = win_rate(hole_card, community_card)
-#
-# print(value)
-#
-# end_time = time.time()
-# elapsed_time = end_time - start_time
-# print(f"Elapsed time: {elapsed_time} seconds")
+all_cards = [suit + rank for suit in ['D', 'H', 'C', 'S'] for rank in ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']]
+
+mcts_map = {
+    'preflop': {},
+    'flop': {}
+}
+
+if __name__ == '__main__':
+    for i in tqdm(range(len(all_cards))):
+        for j in range(i+1,len(all_cards)):
+            hole_cards = [all_cards[i], all_cards[j]]
+            hole_cards.sort()
+            mcts_map['preflop'][''.join(hole_cards)] = win_rate(hole_cards,nb_simulation=1)
+            # print(hole_cards)
+            remaining_cards = all_cards.copy()
+            remaining_cards.remove(all_cards[i])
+            remaining_cards.remove(all_cards[j])
+
+            for k1 in range(len(remaining_cards)):
+                for k2 in range(k1+1,len(remaining_cards)):
+                    for k3 in range(k2+1,len(remaining_cards)):
+                        community_cards = [remaining_cards[k1], remaining_cards[k2], remaining_cards[k3]]
+                        community_cards.sort()
+                        mcts_map['flop'][''.join(hole_cards + community_cards)] = win_rate(hole_cards, community_cards, 1)
+    with open('MCTS_params.json', 'w') as file:
+        json.dump(mcts_map, file)
+
+    # print(len(all_cards))
+
+
+
 
 
