@@ -9,13 +9,21 @@ TODO:
 
 from pypokerengine.players import BasePokerPlayer
 from hand_type import handType
+import random
 
 class RLPlayer(BasePokerPlayer):
 
     def declare_action(self, valid_actions, hole_card, round_state):
         hand = hole_card + round_state['community_card']
         type_of_hand = handType(hand)
-        # print(hand, type_of_hand)
+        # 1 if BIG, 0 if SMALL
+        blindedness = round_state['next_player'] == round_state['big_blind_pos']
+        
+        # TODO: get measures of aggressiveness
+        
+        last_action = list(round_state['action_histories'].values())[0][-1]['action']
+        last_action = 'START' if last_action in ['BIGBLIND', 'SMALLBLIND'] else last_action
+        print(last_action)
         return 'raise'
     
     def receive_game_start_message(self, game_info):
