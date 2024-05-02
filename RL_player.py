@@ -13,18 +13,52 @@ import random
 
 class RLPlayer(BasePokerPlayer):
 
+    def __init__(self):
+        # the following counts apply to the opponent to track aggression
+        self.num_raise_rounds = 0
+        self.raises = 0
+        self.calls = 0
+        self.folds = 0
+        self.last_street = 'river'
+        
+        # last action taken by agent
+        self.last_action = None
+        
     def declare_action(self, valid_actions, hole_card, round_state):
+        this_street = round_state['street']
         hand = hole_card + round_state['community_card']
         type_of_hand = handType(hand)
         # 1 if BIG, 0 if SMALL
-        blindedness = round_state['next_player'] == round_state['big_blind_pos']
+        player_turn = round_state['next_player']
+        blindedness = player_turn == round_state['big_blind_pos']
+        
+        # last_opp_action = list(round_state['action_histories'].values())[0][-1]['action']
+        
+        round_history = round_state['action_histories'][this_street]
+        if not round_history:
+            round_history = round_state['action_histories'][self.last_street]
+        
+        for i in range(player_turn, len(round_history), 2):
+            last_opp_action = round_history[i]['action']
+        
+        if last_opp_action == 'CALL':
+            self.calls += 1
+        elif last_opp_action == 'RAISE':
+            self.raises += 1
+        else:
+            last_opp_action = 'START'
+            if self.last_street != 'river' and self.last_action != 'fold':
+                self.folds += 1
         
         # TODO: get measures of aggressiveness
+        # update counts
+        print(last_opp_action, self.calls, self.raises, self.folds)
         
-        last_action = list(round_state['action_histories'].values())[0][-1]['action']
-        last_action = 'START' if last_action in ['BIGBLIND', 'SMALLBLIND'] else last_action
-        print(last_action)
-        return 'raise'
+        # this_action = random.choice(valid_actions)['action']
+        self.last_street = this_street
+        this_action = 'call'
+        self.last_action = this_action
+        return this_action
     
     def receive_game_start_message(self, game_info):
         pass
