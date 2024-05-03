@@ -1,4 +1,5 @@
 from pypokerengine.players import BasePokerPlayer
+import json
 
 from MCTS.MCTS_win_rate import win_rate
 
@@ -11,11 +12,23 @@ class MCTSPlayer(BasePokerPlayer):
 
     def declare_action(self, valid_actions, hole_card, round_state):
         best_action = 'call'
-        highest_reward = float('-inf')
-
         print(hole_card)
+        
+        hole_card.sort()
+        community_card = round_state['community_card']
+        community_card.sort()
 
-        win_rt = win_rate(hole_card)
+        if round_state['street'] == 'preflop':
+            with open('MCTS/params/MCTS_params_preflop.json', 'r') as file:
+                win_rates = json.load(file)
+            
+            win_rt = win_rates[''.join(hole_card)]
+        elif round_state['street'] == 'flop':
+            with open(f'MCTS/params/MCTS_params_flop_{"".join(hole_card)}.json', 'r') as file:
+                win_rates = json.load(file)
+            win_rt = win_rates[''.join(community_card)]
+        else:
+            win_rt = win_rate(hole_card)
 
         print(win_rt)
 
@@ -31,6 +44,7 @@ class MCTSPlayer(BasePokerPlayer):
             if action == 'raise':
                 if win_rt > 0.8:
                     best_action = action
+                    
             #if reward > highest_reward:
                 #highest_reward = reward
             #best_action = action

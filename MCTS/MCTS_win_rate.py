@@ -49,30 +49,32 @@ def win_rate(hole_card, community_card = None, nb_simulation = 10000):
 
 all_cards = [suit + rank for suit in ['D', 'H', 'C', 'S'] for rank in ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']]
 
-mcts_map = {
-    'preflop': {},
-    'flop': {}
-}
+preflop_map = {}
 
 if __name__ == '__main__':
-    for i in tqdm(range(len(all_cards))):
-        for j in range(i+1,len(all_cards)):
+    for i in range(len(all_cards)):
+        for j in tqdm(range(i+1,len(all_cards))):
             hole_cards = [all_cards[i], all_cards[j]]
             hole_cards.sort()
-            mcts_map['preflop'][''.join(hole_cards)] = win_rate(hole_cards,nb_simulation=1)
+            preflop_map[''.join(hole_cards)] = win_rate(hole_cards,nb_simulation=1)
             # print(hole_cards)
             remaining_cards = all_cards.copy()
             remaining_cards.remove(all_cards[i])
             remaining_cards.remove(all_cards[j])
+
+            flop_map = {}
 
             for k1 in range(len(remaining_cards)):
                 for k2 in range(k1+1,len(remaining_cards)):
                     for k3 in range(k2+1,len(remaining_cards)):
                         community_cards = [remaining_cards[k1], remaining_cards[k2], remaining_cards[k3]]
                         community_cards.sort()
-                        mcts_map['flop'][''.join(hole_cards + community_cards)] = win_rate(hole_cards, community_cards, 1)
-    with open('MCTS_params.json', 'w') as file:
-        json.dump(mcts_map, file)
+                        flop_map[''.join(community_cards)] = win_rate(hole_cards, community_cards, 1)
+            with open(f'params/MCTS_params_flop_{"".join(hole_cards)}.json', 'w') as file:
+                json.dump(flop_map, file)
+                
+    with open('params/MCTS_params_preflop.json', 'w') as file:
+        json.dump(preflop_map, file)
 
     # print(len(all_cards))
 
