@@ -27,11 +27,8 @@ class MCTSPlayer(BasePokerPlayer):
             with open(f'MCTS/params/MCTS_params_flop_{"".join(hole_card)}.json', 'r') as file:
                 win_rates = json.load(file)
             win_rt = win_rates[''.join(community_card)]
-        elif round_state['street'] == 'turn':
-            win_rt = win_rate(hole_card)
         else:
-            win_rt = win_rate(hole_card, nb_simulation=1000)
-            
+            win_rt = win_rate(hole_card)
 
         print(win_rt)
 
