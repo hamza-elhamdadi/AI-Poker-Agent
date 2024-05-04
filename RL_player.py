@@ -55,15 +55,18 @@ class RLPlayer(BasePokerPlayer):
             self.num_raise_rounds += 1 if self.raised_last_round != self.raises else 0
             self.raised_last_round = self.raises
         
-        # TODO: get measures of aggressiveness
         # aggression factor
         AF = self.raises - self.folds
         AF /= self.calls if self.calls else 1 
         
         # percentage of games where opp raises
         VPIP = self.num_raise_rounds / round_state['round_count']
-        print(last_opp_action, self.calls, self.raises, self.folds, AF, VPIP)
         
+        # add state for currently winning/losing
+        sorted_stack = sorted(round_state['seats'], key=lambda x: x['stack'], reverse=True)
+        winning = sorted_stack[0]['uuid'] == self.uuid
+        
+        print(last_opp_action, AF, VPIP, winning)
         # this_action = random.choice(valid_actions)['action']
         self.last_street = this_street
         this_action = 'call'
