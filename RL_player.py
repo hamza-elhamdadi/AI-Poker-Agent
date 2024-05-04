@@ -15,14 +15,17 @@ class RLPlayer(BasePokerPlayer):
 
     def __init__(self):
         # the following counts apply to the opponent to track aggression
-        self.num_raise_rounds = 0
         self.raises = 0
         self.calls = 0
         self.folds = 0
         self.last_street = 'river'
+        self.num_raise_rounds = 0
+        self.raised_last_round = 0
         
         # last action taken by agent
         self.last_action = None
+        
+        self.VPIP = 0
         
     def declare_action(self, valid_actions, hole_card, round_state):
         this_street = round_state['street']
@@ -32,12 +35,11 @@ class RLPlayer(BasePokerPlayer):
         player_turn = round_state['next_player']
         blindedness = player_turn == round_state['big_blind_pos']
         
-        # last_opp_action = list(round_state['action_histories'].values())[0][-1]['action']
-        
         round_history = round_state['action_histories'][this_street]
         if not round_history:
             round_history = round_state['action_histories'][self.last_street]
         
+        last_opp_action = round_history[-1]['action']
         for i in range(player_turn, len(round_history), 2):
             last_opp_action = round_history[i]['action']
         
@@ -49,10 +51,18 @@ class RLPlayer(BasePokerPlayer):
             last_opp_action = 'START'
             if self.last_street != 'river' and self.last_action != 'fold':
                 self.folds += 1
+            # percentage of games where opp raises once
+            self.num_raise_rounds += 1 if self.raised_last_round != self.raises else 0
+            self.raised_last_round = self.raises
         
         # TODO: get measures of aggressiveness
-        # update counts
-        print(last_opp_action, self.calls, self.raises, self.folds)
+        # aggression factor
+        AF = self.raises - self.folds
+        AF /= self.calls if self.calls else 1 
+        
+        # percentage of games where opp raises
+        VPIP = self.num_raise_rounds / round_state['round_count']
+        print(last_opp_action, self.calls, self.raises, self.folds, AF, VPIP)
         
         # this_action = random.choice(valid_actions)['action']
         self.last_street = this_street
