@@ -30,19 +30,19 @@ class RLPlayer(BasePokerPlayer):
     def declare_action(self, valid_actions, hole_card, round_state):
         this_street = round_state['street']
         hand = hole_card + round_state['community_card']
-        type_of_hand = handType(hand)
+        hand_rank = handType(hand)
+        
         # 1 if BIG, 0 if SMALL
         player_turn = round_state['next_player']
         blindedness = player_turn == round_state['big_blind_pos']
-        
+    
+        # get last opponent action / update action counts        
         round_history = round_state['action_histories'][this_street]
         if not round_history:
             round_history = round_state['action_histories'][self.last_street]
-        
         last_opp_action = round_history[-1]['action']
         for i in range(player_turn, len(round_history), 2):
             last_opp_action = round_history[i]['action']
-        
         if last_opp_action == 'CALL':
             self.calls += 1
         elif last_opp_action == 'RAISE':
