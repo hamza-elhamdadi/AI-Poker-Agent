@@ -1,4 +1,5 @@
 from pypokerengine.players import BasePokerPlayer
+from hand_type import handType
 import json
 
 from MCTS.MCTS_win_rate import win_rate
@@ -19,10 +20,11 @@ class MCTSPlayer(BasePokerPlayer):
         community_card.sort()
 
         if round_state['street'] == 'preflop':
-            with open('MCTS/params/MCTS_params_preflop.json', 'r') as file:
-                win_rates = json.load(file)
-            
-            win_rt = win_rates[''.join(hole_card)]
+            type_of_hand = handType(hole_card + community_card)
+            if type_of_hand == 2:
+                return 'raise'
+            else:
+                return 'call'
         elif round_state['street'] == 'flop':
             with open(f'MCTS/params/MCTS_params_flop_{"".join(hole_card)}.json', 'r') as file:
                 win_rates = json.load(file)
