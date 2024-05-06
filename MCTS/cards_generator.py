@@ -15,7 +15,7 @@ for r1 in ranks:  # generate card 1
                         continue
                     for r4 in range(r3,14):  # generate card 4
                         for s4 in suits:
-                            if (r4 == r1 and s4 == s1) or (r4 == r2 and s4 == s2) or (r4 == r3 and s4 == s3) or (s4 == 'D' and s3 != 'C') or (s4 == 'C' and s3 != 'B' and s2 != 'B') or (r4 == r3 and s4 == 'A' and s3 == 'B'):
+                            if (r4 == r1 and s4 == s1) or (r4 == r2 and s4 == s2) or (r4 == r3 and s4 == s3) or (s4 == 'D' and s3 != 'C') or (s4 == 'C' and s3 != 'B' and s2 != 'B') or (r4 == r3 and s4 == 'A' and s3 == 'B') or (r4 == r3 and s4 == 'B' and s3 == 'C') or (r4 == r3 and s4 == 'A' and s3 == 'C'):
                                 continue
                             for r5 in range(r4,14):  # generate card 5
                                 for s5 in suits:
@@ -24,7 +24,7 @@ for r1 in ranks:  # generate card 1
                                     if s5 == 'D' and s4 != 'C' and s3 != 'C':  # jumping suits assignment check
                                         continue
                                     if r5 == r4:
-                                        if (s5 == 'A') or (s5 == 'B' and s4 == 'C') or (s5 == 'C' and s4 == 'D'):
+                                        if (s5 == 'A') or (s5 == 'B' and s4 == 'C') or (s5 == 'C' and s4 == 'D') or (s5 == 'B' and s4 == 'D'):
                                             continue
                                     case_nb += 1
                                     # useful assignment, run the simulation

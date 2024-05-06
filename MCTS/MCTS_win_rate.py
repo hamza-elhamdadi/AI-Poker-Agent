@@ -48,6 +48,8 @@ def win_rate(hole_card, community_card = None, nb_simulation = 10000):
     value = estimate_hole_card_win_rate(nb_simulation,2, hole, community)
     return value
 
+count_nb = 0
+
 all_cards = [suit + rank for suit in ['D', 'H', 'C', 'S'] for rank in ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']]
 nb_sims = 1000
 if __name__ == '__main__':
@@ -74,7 +76,7 @@ if __name__ == '__main__':
             with open(f'MCTS/params/MCTS_params_flop_{"".join(hole_cards)}.json', 'w') as file:
                 json.dump(flop_map, file)
                 
-
+print(count_nb)
 
 
 
