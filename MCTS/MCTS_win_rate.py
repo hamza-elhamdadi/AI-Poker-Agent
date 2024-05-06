@@ -49,7 +49,7 @@ def win_rate(hole_card, community_card = None, nb_simulation = 10000):
     return value
 
 all_cards = [suit + rank for suit in ['D', 'H', 'C', 'S'] for rank in ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']]
-
+nb_sims = 1000
 if __name__ == '__main__':
     for i in range(len(all_cards)):
         for j in tqdm(range(i+1,len(all_cards))):
@@ -70,8 +70,8 @@ if __name__ == '__main__':
                         community_values = [c[1] for c in community_cards]
                         community_values.sort()
                         if not ''.join(community_values) in flop_map:
-                            flop_map[''.join(community_values)] = win_rate(hole_cards, community_cards, 1)
-            with open(f'params/MCTS_params_flop_{"".join(hole_cards)}.json', 'w') as file:
+                            flop_map[''.join(community_values)] = win_rate(hole_cards, community_cards, nb_sims)
+            with open(f'MCTS/params/MCTS_params_flop_{"".join(hole_cards)}.json', 'w') as file:
                 json.dump(flop_map, file)
                 
 

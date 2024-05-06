@@ -17,7 +17,8 @@ class MCTSPlayer(BasePokerPlayer):
         
         hole_card.sort()
         community_card = round_state['community_card']
-        community_card.sort()
+        community_values = [c[1] for c in community_card]
+        community_values.sort()
 
         if round_state['street'] == 'preflop':
             type_of_hand = handType(hole_card + community_card)
@@ -28,7 +29,7 @@ class MCTSPlayer(BasePokerPlayer):
         elif round_state['street'] == 'flop':
             with open(f'MCTS/params/MCTS_params_flop_{"".join(hole_card)}.json', 'r') as file:
                 win_rates = json.load(file)
-            win_rt = win_rates[''.join(community_card)]
+            win_rt = win_rates[''.join(community_values)]
         else:
             win_rt = win_rate(hole_card)
 
