@@ -13,5 +13,5 @@ config.register_player(name="f1", algorithm=MCTSPlayer())
 config.register_player(name="FT2", algorithm=RaisedPlayer())
 
 
-game_result = start_poker(config, verbose=False)
+game_result = start_poker(config, verbose=1)
 print(game_result)

@@ -31,24 +31,26 @@ class MCTSPlayer(BasePokerPlayer):
                     win_rates = json.load(file)
                 win_rt = win_rates[''.join(community_values)]
             elif round_state['street'] == 'turn':
-                win_rt = 0
+                win_rt = []
                 with open(f'MCTS/params/MCTS_params_flop_{"".join(hole_card)}.json', 'r') as file:
                     win_rates = json.load(file)
-                win_rt += win_rates[''.join(community_values[:-1])]
-                win_rt += win_rates[''.join(community_values[1:])]
-                win_rt += win_rates[''.join(community_values[:1]+community_values[2:])]
-                win_rt += win_rates[''.join(community_values[:2]+community_values[3:])]
+                win_rt.append(win_rates[''.join(community_values[:-1])])
+                win_rt.append(win_rates[''.join(community_values[1:])])
+                win_rt.append(win_rates[''.join(community_values[:1]+community_values[2:])])
+                win_rt.append(win_rates[''.join(community_values[:2]+community_values[3:])])
+
                 adjusted_hole = hole_card[:1]+round_state["community_card"][:1]
                 adjusted_hole.sort()
                 with open(f'MCTS/params/MCTS_params_flop_{"".join(adjusted_hole)}.json', 'r') as file:
                     win_rates = json.load(file)
-                win_rt += win_rates[''.join(community_values[1:])]
+                win_rt.append(win_rates[''.join(community_values[1:])])
+
                 adjusted_hole = hole_card[1:]+round_state["community_card"][:1]
                 adjusted_hole.sort()
                 with open(f'MCTS/params/MCTS_params_flop_{"".join(adjusted_hole)}.json', 'r') as file:
                     win_rates = json.load(file)
-                win_rt += win_rates[''.join(community_values[1:])]
-                win_rt /= 6
+                win_rt.append(win_rates[''.join(community_values[1:])])
+                win_rt = sum(win_rt)/len(win_rt)
             else:
                 win_rt = win_rate(hole_card)
 

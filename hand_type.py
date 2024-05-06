@@ -77,7 +77,7 @@ def handType(hand):
     card_suits = [v[0] for v in cards]
     values = [v[1] for v in cards]
 
-    print(cards)
+    # print(cards)
 
     if len(hand) > 2:
     
