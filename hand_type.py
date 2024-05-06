@@ -77,7 +77,7 @@ def handType(hand):
     card_suits = [v[0] for v in cards]
     values = [v[1] for v in cards]
 
-    print(cards)
+    #print(cards)
     
     if checkFlush(card_suits) and checkStraightFromValue(10, values) and 10 in values:
         print('has a royal flush')

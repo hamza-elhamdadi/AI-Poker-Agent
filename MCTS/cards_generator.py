@@ -73,3 +73,7 @@ print("We should run " + str(simulations_nb1)+" simulations in pre-flop round")
 print("We should run " + str(simulations_nb2)+" simulations in flop round")
 print("We should run " + str(simulations_nb3)+" simulations in turn round")
 print("We should run " + str(simulations_nb4)+" simulations in river round")
+
+# 1. NO repeating cards
+# 2. r1 <= r2  r3 <= r4 <= r5
+# 3. s1 = A s2 = A/B
