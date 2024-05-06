@@ -1,7 +1,7 @@
 from pypokerengine.api.game import setup_config, start_poker
 from randomplayer import RandomPlayer
 from raise_player import RaisedPlayer
-from MCTS.mcts_player import MCTSPlayer
+from mcts_player import MCTSPlayer
 from uninformed_player import UninformedPlayer
 
 #TODO:config the config as you wish

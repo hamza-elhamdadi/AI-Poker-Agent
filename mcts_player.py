@@ -13,18 +13,16 @@ class MCTSPlayer(BasePokerPlayer):
 
     def declare_action(self, valid_actions, hole_card, round_state):
         if round_state['street'] == 'preflop':
-            type_of_hand = handType(hole_card + community_card)
+            type_of_hand = handType(hole_card + round_state['community_card'])
             if type_of_hand == 2:
                 return 'raise'
             else:
                 return 'call'
         else:
             best_action = 'call'
-            print(hole_card)
             
             hole_card.sort()
-            community_card = round_state['community_card']
-            community_values = [c[1] for c in community_card]
+            community_values = [c[1] for c in round_state['community_card']]
             community_values.sort()
 
             if round_state['street'] == 'flop':
@@ -34,18 +32,12 @@ class MCTSPlayer(BasePokerPlayer):
             else:
                 win_rt = win_rate(hole_card)
 
-            for i in valid_actions:
-                action = i['action']
-                #reward = self.estimate_reward(action, hole_card, round_state)
-                if action == 'fold':
-                    if win_rt <= 0.2:
-                        best_action = action
-                if action == 'call':
-                    if 0.2 < win_rt <= 0.8:
-                        best_action = action
-                if action == 'raise':
-                    if win_rt > 0.8:
-                        best_action = action
+            if win_rt <= 0.2:
+                best_action = 'fold'
+            elif win_rt <= 0.8:
+                best_action = 'call'
+            else:
+                best_action = 'raise'
 
             return best_action
 
