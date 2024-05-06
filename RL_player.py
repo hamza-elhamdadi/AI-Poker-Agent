@@ -1,14 +1,18 @@
 # Jay's agent using Q-learning
 """
-TODO:
+DONE:
     - Gather full intel on state at each round
     - Generate/Init Q-table
     - Use state info to index Q-table
+TODO:
     - Write Q-learning update function
+    - Implement epsilon-greedy for training
+    - Train against various agents
 """
 
 from pypokerengine.players import BasePokerPlayer
 from hand_type import handType
+import pandas as pd
 import random
 
 class RLPlayer(BasePokerPlayer):
@@ -21,20 +25,20 @@ class RLPlayer(BasePokerPlayer):
         self.last_street = 'river'
         self.num_raise_rounds = 0
         self.raised_last_round = 0
-        
-        # last action taken by agent
         self.last_action = None
-        
-        self.VPIP = 0
+        self.AF_THRESH = 0.5
+        self.VPIP_THRESH = 5
+        self.qtable_fname = 'RL_models/qtable.csv'
         
     def declare_action(self, valid_actions, hole_card, round_state):
+        df = pd.read_csv(self.qtable_fname)
         this_street = round_state['street']
         hand = hole_card + round_state['community_card']
-        hand_rank = handType(hand)
+        hand_rank = handType(hand) - 1
         
         # 1 if BIG, 0 if SMALL
         player_turn = round_state['next_player']
-        blindedness = player_turn == round_state['big_blind_pos']
+        blindedness = int(player_turn == round_state['big_blind_pos'])
     
         # get last opponent action / update action counts        
         round_history = round_state['action_histories'][this_street]
@@ -63,11 +67,17 @@ class RLPlayer(BasePokerPlayer):
         
         # add state for currently winning/losing
         sorted_stack = sorted(round_state['seats'], key=lambda x: x['stack'], reverse=True)
-        winning = sorted_stack[0]['uuid'] == self.uuid
+        winning = int(sorted_stack[0]['uuid'] == self.uuid)
         
-        print(last_opp_action, AF, VPIP, winning)
-        # this_action = random.choice(valid_actions)['action']
-        this_action = 'call'
+        # generate key for indexing Q-table
+        key = f'H{hand_rank}B{blindedness}L{int(last_opp_action == "RAISE")}'
+        key += f'A{int(AF < self.AF_THRESH)}V{int(VPIP < self.VPIP_THRESH)}W{winning}'
+        max_action_idx = df[key].idxmax()
+        try:
+            this_action = valid_actions[max_action_idx]['action']
+        except IndexError:
+            this_action = 'call'
+        # print(df[key], this_action)
         self.last_street = this_street
         self.last_action = this_action
         return this_action
