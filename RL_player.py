@@ -48,10 +48,9 @@ class RLPlayer(BasePokerPlayer):
         elif last_opp_action == 'RAISE':
             self.raises += 1
         else:
-            last_opp_action = 'START'
+            last_opp_action = 'CALL'
             if self.last_street != 'river' and self.last_action != 'fold':
                 self.folds += 1
-            # percentage of games where opp raises once
             self.num_raise_rounds += 1 if self.raised_last_round != self.raises else 0
             self.raised_last_round = self.raises
         
@@ -68,8 +67,8 @@ class RLPlayer(BasePokerPlayer):
         
         print(last_opp_action, AF, VPIP, winning)
         # this_action = random.choice(valid_actions)['action']
-        self.last_street = this_street
         this_action = 'call'
+        self.last_street = this_street
         self.last_action = this_action
         return this_action
     
