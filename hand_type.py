@@ -31,24 +31,24 @@ def checkMatching(values):
     vals, counts = np.unique(values, return_counts=True)
     counts = np.sort(counts)[::-1]
     if counts[0] == 4:
-        print('has four of a kind')
+        # print('has four of a kind')
         return FOUR_OF_A_KIND
 
     if counts[0] == 3:
         if len(counts) > 1 and counts[1] == 2:
-            print('has a full house')
+            # print('has a full house')
             return FULL_HOUSE
-        print('has three of a kind')
+        # print('has three of a kind')
         return THREE_OF_A_KIND
 
     if counts[0] == 2:
         if len(counts) > 1 and counts[1] == 2:
-            print('has two pairs')
+            # print('has two pairs')
             return TWO_PAIRS
-        print('has a pair')
+        # print('has a pair')
         return PAIR
     
-    print(f'has high card: {np.max(vals)}')
+    # print(f'has high card: {np.max(vals)}')
     return HIGHCARD
 
 
@@ -78,38 +78,23 @@ def handType(hand):
     values = [v[1] for v in cards]
 
     print(cards)
+
+    if len(hand) > 2:
     
-    if checkFlush(card_suits) and checkStraightFromValue(10, values) and 10 in values:
-        print('has a royal flush')
-        return ROYAL_FLUSH
-        
-    if checkFlush(card_suits) and checkStraight(values):
-        print('has a straight flush')
-        return STRAIGHT_FLUSH
+        if checkFlush(card_suits) and checkStraightFromValue(10, values) and 10 in values:
+            # print('has a royal flush')
+            return ROYAL_FLUSH
+            
+        if checkFlush(card_suits) and checkStraight(values):
+            # print('has a straight flush')
+            return STRAIGHT_FLUSH
 
-    if checkStraight(values):
-        print('has a straight')
-        return STRAIGHT
+        if checkStraight(values):
+            # print('has a straight')
+            return STRAIGHT
 
-    if checkFlush(card_suits):
-        print('has a flush')
-        return FLUSH
+        if checkFlush(card_suits):
+            # print('has a flush')
+            return FLUSH
 
     return checkMatching(values)
-
-def handType_2cards(hand):
-    cards = [(h[0], valueMap[h[1]]) for h in hand]
-    cards = sorted(cards, key=lambda v: v[1])
-    card_suits = [v[0] for v in cards]
-    values = [v[1] for v in cards]
-    if values[0]==values[1]:
-        return 2
-    diff = values[1]-values[0]
-    same_suits = card_suits[0]==card_suits[1]
-    if diff > 0 and diff < 5:
-        if same_suits:
-            return 5
-        return 3
-    if same_suits:
-        return 4
-    return 1

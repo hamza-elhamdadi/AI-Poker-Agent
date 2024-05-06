@@ -1,6 +1,7 @@
 from pypokerengine.players import BasePokerPlayer
 from hand_type import handType
 import json
+import time
 
 from MCTS.MCTS_win_rate import win_rate
 
@@ -29,12 +30,31 @@ class MCTSPlayer(BasePokerPlayer):
                 with open(f'MCTS/params/MCTS_params_flop_{"".join(hole_card)}.json', 'r') as file:
                     win_rates = json.load(file)
                 win_rt = win_rates[''.join(community_values)]
+            elif round_state['street'] == 'turn':
+                win_rt = 0
+                with open(f'MCTS/params/MCTS_params_flop_{"".join(hole_card)}.json', 'r') as file:
+                    win_rates = json.load(file)
+                win_rt += win_rates[''.join(community_values[:-1])]
+                win_rt += win_rates[''.join(community_values[1:])]
+                win_rt += win_rates[''.join(community_values[:1]+community_values[2:])]
+                win_rt += win_rates[''.join(community_values[:2]+community_values[3:])]
+                adjusted_hole = hole_card[:1]+round_state["community_card"][:1]
+                adjusted_hole.sort()
+                with open(f'MCTS/params/MCTS_params_flop_{"".join(adjusted_hole)}.json', 'r') as file:
+                    win_rates = json.load(file)
+                win_rt += win_rates[''.join(community_values[1:])]
+                adjusted_hole = hole_card[1:]+round_state["community_card"][:1]
+                adjusted_hole.sort()
+                with open(f'MCTS/params/MCTS_params_flop_{"".join(adjusted_hole)}.json', 'r') as file:
+                    win_rates = json.load(file)
+                win_rt += win_rates[''.join(community_values[1:])]
+                win_rt /= 6
             else:
                 win_rt = win_rate(hole_card)
 
             if win_rt <= 0.2:
                 best_action = 'fold'
-            elif win_rt <= 0.8:
+            elif win_rt <= 0.66:
                 best_action = 'call'
             else:
                 best_action = 'raise'

@@ -41,7 +41,7 @@ def map_cards_to_numbers(card_list):
             cards.append(mapped_card)
     return cards
 
-def win_rate(hole_card, community_card = None, nb_simulation = 10000):
+def win_rate(hole_card, community_card = None, nb_simulation = 1000):
     num_community_cards = 0 if community_card == None else len(community_card)
     hole = map_cards_to_numbers(hole_card)
     community = map_cards_to_numbers(community_card)
