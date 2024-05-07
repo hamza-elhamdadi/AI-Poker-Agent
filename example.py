@@ -10,8 +10,7 @@ config = setup_config(max_round=200, initial_stack=1000, small_blind_amount=10)
 
 
 config.register_player(name="f1", algorithm=MCTSPlayer())
-config.register_player(name="FT2", algorithm=RaisedPlayer())
+config.register_player(name="FT2", algorithm=RandomPlayer())
 
 
-game_result = start_poker(config, verbose=1)
-print(game_result)
+game_result = start_poker(config, verbose=False)
