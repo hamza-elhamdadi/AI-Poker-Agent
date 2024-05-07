@@ -3,6 +3,7 @@ from hand_type import handType
 import json
 import os
 import time
+import numpy as np
 
 from MCTS.MCTS_win_rate import win_rate
 
@@ -115,7 +116,7 @@ class MCTSPlayer(BasePokerPlayer):
 
             else:
                 start = time.time()
-                pw = win_rate(hole_card)
+                pw = win_rate(hole_card, nb_simulation=500)
                 print('river time:', time.time() - start)
                 pa2, pb = compute_raise_rate(round_state['action_histories'], 'river', opponent_uuid)
 
@@ -126,7 +127,6 @@ class MCTSPlayer(BasePokerPlayer):
             # pa2 = pb
 
             pa = (pa1 + pa2)/2
-            print('pb:', pb)
 
             if pb <= pa:
                 po = alpha + (0.5 - alpha)*pb/pa
@@ -145,7 +145,7 @@ class MCTSPlayer(BasePokerPlayer):
             if b < c:
                 return 'fold'
             else:
-                return 'raise' if p > 0.8 else 'call'
+                return np.random.choice(['raise', 'call'], p=[p,1-p])
 
     def receive_game_start_message(self, game_info):
         pass
