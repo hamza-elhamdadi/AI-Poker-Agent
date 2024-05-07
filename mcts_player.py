@@ -6,7 +6,7 @@ import time
 
 from MCTS.MCTS_win_rate import win_rate
 
-def average_base_win_rate(hole_card, community_card, community_values):
+def average_base_win_rate_for_turn(hole_card, community_card, community_values):
     win_rt = []
     with open(f'MCTS/params/MCTS_params_flop_{"".join(hole_card)}.json', 'r') as file:
         win_rates = json.load(file)
@@ -109,11 +109,9 @@ class MCTSPlayer(BasePokerPlayer):
                 pw = win_rates[''.join(community_values)]
                 pa2, pb = compute_raise_rate(round_state['action_histories'], 'flop', opponent_uuid)
                 
-                
             elif round_state['street'] == 'turn':
-                pw = average_base_win_rate(hole_card, round_state['community_card'], community_values)
+                pw = average_base_win_rate_for_turn(hole_card, round_state['community_card'], community_values)
                 pa2, pb = compute_raise_rate(round_state['action_histories'], 'turn', opponent_uuid)
-
 
             else:
                 pw = win_rate(hole_card)
