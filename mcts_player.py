@@ -114,7 +114,9 @@ class MCTSPlayer(BasePokerPlayer):
                 pa2, pb = compute_raise_rate(round_state['action_histories'], 'turn', opponent_uuid)
 
             else:
+                start = time.time()
                 pw = win_rate(hole_card)
+                print('river time:', time.time() - start)
                 pa2, pb = compute_raise_rate(round_state['action_histories'], 'river', opponent_uuid)
 
             alpha = 0.3
