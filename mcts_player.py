@@ -101,8 +101,6 @@ class MCTSPlayer(BasePokerPlayer):
             else:
                 return 'call'
         else:
-            best_action = 'call'
-            
             hole_card.sort()
             community_values = [c[1] for c in round_state['community_card']]
             community_values.sort()

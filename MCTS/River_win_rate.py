@@ -56,7 +56,7 @@ def river_win_rate_by_hand_type():
         ['H2', 'S2', 'D2', 'C5', 'C8', 'HT', 'CJ'],
         ['H2', 'S2', 'H3', 'S3', 'C5', 'C7', 'H9'],
         ['H2', 'S2', 'CT', 'C9', 'H7', 'D5', 'DQ'],
-        ['H2', 'H3', 'H4', 'H5', 'D7', 'D9', 'DT']
+        ['H2', 'H3', 'H4', 'H5', 'D7', 'D8', 'D9']
     ]
 
     hands_high = [
