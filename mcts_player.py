@@ -34,7 +34,7 @@ def average_base_win_rate_for_turn(hole_card, community_card):
     # return max(win_rt)
     return sum(win_rt)/len(win_rt)
 
-def compute_raise_rate(action_histories, curr_street, opponent_uuid):
+def compute_raise_rate(self, action_histories, curr_street, opponent_uuid):
     nr, nc = 0, 0
 
     if curr_street == 'preflop':
@@ -53,36 +53,25 @@ def compute_raise_rate(action_histories, curr_street, opponent_uuid):
             if action['action'] == 'RAISE' and action['uuid'] == opponent_uuid:
                 nr += 1
 
-
-    if os.path.exists(f'MCTS/opponent_data/{opponent_uuid}.txt'):
-        with open(f'MCTS/opponent_data/{opponent_uuid}.txt', 'r') as file:
-            line = file.read()
-            Nr, Nc = [int(x) for x in line.split(',')]
-    else:
-        Nr, Nc = 0,0
-
-    Nr += nr
-    Nc += nc
-
-    with open(f'MCTS/opponent_data/{opponent_uuid}.txt', 'w') as file:
-        file.write(f'{Nr},{Nc}')
+    self.Nr += nr
+    self.Nc += nc
 
     pb, pa2 = 0, 0
     if nr + nc != 0:
         pb = nr/(nr+nc)
-    if Nr + Nc != 0:
-        pa2 = Nr/(Nr+Nc)
+    if self.Nr + self.Nc != 0:
+        pa2 = self.Nr/(self.Nr+self.Nc)
     return pa2, pb
 
 def get_street_num(street):
     return (street=='preflop') + (street=='flop')*2 + (street=='turn')*3 + (street=='river')*4
 
 class MCTSPlayer(BasePokerPlayer):
+    
+    def __init__(self):
+        self.Nc = 0
+        self.Nr = 0
 
-    def estimate_reward(self, action, hole_card, round_state):
-        import random
-        return random.random()
-        # TODO:Use MCTS to build a reward table
 
     def declare_action(self, valid_actions, hole_card, round_state):
         # print(round_state['action_histories'])
@@ -109,11 +98,11 @@ class MCTSPlayer(BasePokerPlayer):
                 with open(f'MCTS/params/MCTS_params_flop_{"".join(hole_card)}.json', 'r') as file:
                     win_rates = json.load(file)
                 pw = win_rates[''.join(community_values)]
-                pa2, pb = compute_raise_rate(round_state['action_histories'], 'flop', opponent_uuid)
+                pa2, pb = compute_raise_rate(self, round_state['action_histories'], 'flop', opponent_uuid)
                 
             elif round_state['street'] == 'turn':
                 pw = average_base_win_rate_for_turn(hole_card, round_state['community_card'])
-                pa2, pb = compute_raise_rate(round_state['action_histories'], 'turn', opponent_uuid)
+                pa2, pb = compute_raise_rate(self, round_state['action_histories'], 'turn', opponent_uuid)
 
             else:
                 # start = time.time()
@@ -122,7 +111,7 @@ class MCTSPlayer(BasePokerPlayer):
                     win_rates = json.load(file)
                 pw = win_rates[type_of_hand-1]
                 # print('river time:', time.time() - start)
-                pa2, pb = compute_raise_rate(round_state['action_histories'], 'river', opponent_uuid)
+                pa2, pb = compute_raise_rate(self, round_state['action_histories'], 'river', opponent_uuid)
 
             alpha = 0.3
             gamma = 0.5
