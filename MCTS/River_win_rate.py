@@ -1,6 +1,8 @@
 import time
-from MCTS_win_rate import map_cards_to_numbers
+from MCTS_win_rate import map_cards_to_numbers, win_rate
 from pypokerengine.utils.card_utils import evaluate_hand
+from tqdm import tqdm
+import json
 
 
 
@@ -42,5 +44,50 @@ def river_win_rate(hole_card, community_card):
     elapsed_time = end_time - start_time
     print("Time elapsed:", elapsed_time, "seconds")
 
+
+def river_win_rate_by_hand_type():
+    hands_low = [
+        ['HT', 'HJ', 'HQ', 'HK', 'HA', 'S2', 'S3'],
+        ['H2', 'H3', 'H4', 'H5', 'H6', 'S8', 'S9'],
+        ['H2', 'S2', 'D2', 'C2', 'S4', 'S7', 'S3'],
+        ['H2', 'S2', 'D2', 'H3', 'D3', 'S7', 'S4'],
+        ['H2', 'H3', 'H4', 'H5', 'H7', 'S8', 'ST'],
+        ['H2', 'S3', 'H4', 'S5', 'H6', 'SJ', 'SQ'],
+        ['H2', 'S2', 'D2', 'C5', 'C8', 'HT', 'CJ'],
+        ['H2', 'S2', 'H3', 'S3', 'C5', 'C7', 'H9'],
+        ['H2', 'S2', 'CT', 'C9', 'H7', 'D5', 'DQ'],
+        ['H2', 'H3', 'H4', 'H5', 'D7', 'D9', 'DT']
+    ]
+
+    hands_high = [
+        ['HT', 'HJ', 'HQ', 'HK', 'HA', 'S2', 'S3'],
+        ['H9', 'HT', 'HJ', 'HQ', 'HK', 'S2', 'S3'],
+        ['HA', 'SA', 'DA', 'CA', 'S4', 'S2', 'S3'],
+        ['HA', 'SA', 'DA', 'HK', 'DK', 'S2', 'S3'],
+        ['H9', 'HJ', 'HQ', 'HK', 'HA', 'S2', 'S3'],
+        ['HT', 'SJ', 'HQ', 'SK', 'HA', 'S2', 'S3'],
+        ['HA', 'SA', 'DA', 'C2', 'C3', 'H4', 'C6'],
+        ['HA', 'SA', 'HK', 'SK', 'C2', 'C3', 'H4'],
+        ['HA', 'SA', 'C2', 'C3', 'H4', 'D8', 'D9'],
+        ['HA', 'C2', 'C3', 'H4', 'D8', 'D9', 'DJ']
+    ]
+    
+    win_rates = []
+    for i in tqdm(range(len(hands_low))):
+        low_win_rt = win_rate(hands_low[i][:2], hands_low[i][2:], int(1e5))
+        high_win_rt = win_rate(hands_high[i][:2], hands_high[i][2:], int(1e5))
+        win_rates.append((low_win_rt+high_win_rt)/2)
+    
+
+    print(win_rates)
+    print(list(reversed(win_rates)))
+    with open('params/MCTS_params_river.json', 'w') as file:
+        json.dump(list(reversed(win_rates)), file)
+
+
+
+
+
+
 if __name__ == '__main__':
-    river_win_rate(['DK', 'DQ'], ['DA', 'DJ', 'DT', 'S3', 'S2'])
+    river_win_rate_by_hand_type()

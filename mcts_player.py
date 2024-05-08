@@ -116,7 +116,10 @@ class MCTSPlayer(BasePokerPlayer):
 
             else:
                 start = time.time()
-                pw = win_rate(hole_card, nb_simulation=500)
+                type_of_hand = handType(hole_card + round_state['community_card'])
+                with open(f'MCTS/params/MCTS_params_river.json', 'r') as file:
+                    win_rates = json.load(file)
+                pw = win_rates[type_of_hand-1]
                 print('river time:', time.time() - start)
                 pa2, pb = compute_raise_rate(round_state['action_histories'], 'river', opponent_uuid)
 

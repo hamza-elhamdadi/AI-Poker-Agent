@@ -50,6 +50,7 @@ def win_rate(hole_card, community_card = None, nb_simulation = 1000):
 
 all_cards = [suit + rank for suit in ['D', 'H', 'C', 'S'] for rank in ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']]
 nb_sims = 1000
+
 if __name__ == '__main__':
     for i in range(len(all_cards)):
         for j in tqdm(range(i+1,len(all_cards))):
