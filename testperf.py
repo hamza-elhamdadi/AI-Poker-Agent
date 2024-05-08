@@ -34,8 +34,10 @@ def testperf(agent_name1, agent_name2):
 	# Setting configuration
 	config = setup_config(max_round=max_round, initial_stack=initial_stack, small_blind_amount=smallblind_amount)
 	
+	our_player = MCTSPlayer()
+
 	# Register players
-	config.register_player(name=agent_name1, algorithm=MCTSPlayer())
+	config.register_player(name=agent_name1, algorithm=our_player)
 	config.register_player(name=agent_name2, algorithm=RaisedPlayer())
 	# config.register_player(name=agent_name1, algorithm=agent1())
 	# config.register_player(name=agent_name2, algorithm=agent2())
@@ -64,6 +66,8 @@ def testperf(agent_name1, agent_name2):
 		# print("\n Random Player has won!")
 	else:
 		print("\n It's a draw!") 
+
+	print(our_player.Nr, our_player.Nc)
 
 
 def parse_arguments():
