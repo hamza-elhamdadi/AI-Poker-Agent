@@ -9,6 +9,8 @@ from argparse import ArgumentParser
 
 """ =========== *Remember to import your agent!!! =========== """
 from randomplayer import RandomPlayer
+from raise_player import RaisedPlayer
+from mcts_player import MCTSPlayer
 # from smartwarrior import SmartWarrior
 """ ========================================================= """
 
@@ -17,10 +19,10 @@ from randomplayer import RandomPlayer
 $ python testperf.py -n1 "Random Warrior 1" -a1 RandomPlayer -n2 "Random Warrior 2" -a2 RandomPlayer
 """
 
-def testperf(agent_name1, agent1, agent_name2, agent2):		
+def testperf(agent_name1, agent_name2):		
 
 	# Init to play 500 games of 1000 rounds
-	num_game = 500
+	num_game = 200
 	max_round = 1000
 	initial_stack = 10000
 	smallblind_amount = 20
@@ -33,8 +35,8 @@ def testperf(agent_name1, agent1, agent_name2, agent2):
 	config = setup_config(max_round=max_round, initial_stack=initial_stack, small_blind_amount=smallblind_amount)
 	
 	# Register players
-	config.register_player(name=agent_name1, algorithm=RandomPlayer())
-	config.register_player(name=agent_name2, algorithm=RandomPlayer())
+	config.register_player(name=agent_name1, algorithm=MCTSPlayer())
+	config.register_player(name=agent_name2, algorithm=RaisedPlayer())
 	# config.register_player(name=agent_name1, algorithm=agent1())
 	# config.register_player(name=agent_name2, algorithm=agent2())
 	
@@ -56,7 +58,7 @@ def testperf(agent_name1, agent1, agent_name2, agent2):
 	# print("\n " + agent_name + "'s final stack: ", game_result['players'][1]['stack'])
 
 	if (agent1_pot<agent2_pot):
-		print("\n Congratulations! " + agent_name2 + " has won.")
+		print("\n Sorry! " + agent_name2 + " has won.")
 	elif(agent1_pot>agent2_pot):
 		print("\n Congratulations! " + agent_name1 + " has won.")
 		# print("\n Random Player has won!")
@@ -67,16 +69,14 @@ def testperf(agent_name1, agent1, agent_name2, agent2):
 def parse_arguments():
     parser = ArgumentParser()
     parser.add_argument('-n1', '--agent_name1', help="Name of agent 1", default="Your agent", type=str)
-    parser.add_argument('-a1', '--agent1', help="Agent 1", default=RandomPlayer())    
-    parser.add_argument('-n2', '--agent_name2', help="Name of agent 2", default="Your agent", type=str)
-    parser.add_argument('-a2', '--agent2', help="Agent 2", default=RandomPlayer())    
+    parser.add_argument('-n2', '--agent_name2', help="Name of agent 2", default="Opponent agent", type=str)
     args = parser.parse_args()
-    return args.agent_name1, args.agent1, args.agent_name2, args.agent2
+    return args.agent_name1, args.agent_name2
 
 if __name__ == '__main__':
-	name1, agent1, name2, agent2 = parse_arguments()
+	name1, name2 = parse_arguments()
 	start = time.time()
-	testperf(name1, agent1, name2, agent2)
+	testperf(name1, name2)
 	end = time.time()
 
 	print("\n Time taken to play: %.4f seconds" %(end-start))

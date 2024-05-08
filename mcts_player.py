@@ -7,26 +7,29 @@ import numpy as np
 
 from MCTS.MCTS_win_rate import win_rate
 
-def average_base_win_rate_for_turn(hole_card, community_card, community_values):
+def average_base_win_rate_for_turn(hole_card, community_card):
     win_rt = []
+    community_values = [c[1] for c in community_card]
+    # print(hole_card, community_card, community_values)
     with open(f'MCTS/params/MCTS_params_flop_{"".join(hole_card)}.json', 'r') as file:
         win_rates = json.load(file)
-    win_rt.append(win_rates[''.join(community_values[:-1])])
-    win_rt.append(win_rates[''.join(community_values[1:])])
-    win_rt.append(win_rates[''.join(community_values[:1]+community_values[2:])])
-    win_rt.append(win_rates[''.join(community_values[:2]+community_values[3:])])
+    win_rt.append(win_rates[''.join(np.sort(community_values[:-1]))])
+    win_rt.append(win_rates[''.join(np.sort(community_values[1:]))])
+    win_rt.append(win_rates[''.join(np.sort(community_values[:1]+community_values[2:]))])
+    win_rt.append(win_rates[''.join(np.sort(community_values[:2]+community_values[3:]))])
 
     adjusted_hole = hole_card[:1]+community_card[:1]
     adjusted_hole.sort()
     with open(f'MCTS/params/MCTS_params_flop_{"".join(adjusted_hole)}.json', 'r') as file:
         win_rates = json.load(file)
-    win_rt.append(win_rates[''.join(community_values[1:])])
+
+    win_rt.append(win_rates[''.join(np.sort(community_values[1:]))])
 
     adjusted_hole = hole_card[1:]+community_card[:1]
     adjusted_hole.sort()
     with open(f'MCTS/params/MCTS_params_flop_{"".join(adjusted_hole)}.json', 'r') as file:
         win_rates = json.load(file)
-    win_rt.append(win_rates[''.join(community_values[1:])])
+    win_rt.append(win_rates[''.join(np.sort(community_values[1:]))])
 
     # return max(win_rt)
     return sum(win_rt)/len(win_rt)
@@ -83,7 +86,7 @@ class MCTSPlayer(BasePokerPlayer):
 
     def declare_action(self, valid_actions, hole_card, round_state):
         # print(round_state['action_histories'])
-        print(round_state['seats'])
+        # print(round_state['seats'])
         # print(self.uuid)
         opponent_uuid = ''
         for seat in round_state['seats']:
@@ -111,16 +114,16 @@ class MCTSPlayer(BasePokerPlayer):
                 pa2, pb = compute_raise_rate(round_state['action_histories'], 'flop', opponent_uuid)
                 
             elif round_state['street'] == 'turn':
-                pw = average_base_win_rate_for_turn(hole_card, round_state['community_card'], community_values)
+                pw = average_base_win_rate_for_turn(hole_card, round_state['community_card'])
                 pa2, pb = compute_raise_rate(round_state['action_histories'], 'turn', opponent_uuid)
 
             else:
-                start = time.time()
+                # start = time.time()
                 type_of_hand = handType(hole_card + round_state['community_card'])
                 with open(f'MCTS/params/MCTS_params_river.json', 'r') as file:
                     win_rates = json.load(file)
                 pw = win_rates[type_of_hand-1]
-                print('river time:', time.time() - start)
+                # print('river time:', time.time() - start)
                 pa2, pb = compute_raise_rate(round_state['action_histories'], 'river', opponent_uuid)
 
             alpha = 0.3
