@@ -35,7 +35,7 @@ def testperf(agent_name1, agent_name2):
 	# Setting configuration
 	config = setup_config(max_round=max_round, initial_stack=initial_stack, small_blind_amount=smallblind_amount)
 	
-	our_player = MCTSPlayer()
+	our_player = MCTSPlayer(gamma = 0.5)
 	opponent_player = RaisedPlayer()
 
 	# Register players

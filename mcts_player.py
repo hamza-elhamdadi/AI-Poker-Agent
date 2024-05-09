@@ -68,10 +68,9 @@ def get_street_num(street):
 
 class MCTSPlayer(BasePokerPlayer):
     
-    def __init__(self, alpha=0.3, gamma=0.5):
+    def __init__(self, gamma=0.7):
         self.Nc = 0
         self.Nr = 0
-        self.alpha = alpha
         self.gamma = gamma
 
 
@@ -115,10 +114,20 @@ class MCTSPlayer(BasePokerPlayer):
             # trained from MCTSPlayer vs MCTSPlayer
             pa1 = 0.44417431136246915
 
+            # probability that the opponent will raise if they stay in the game
             pa = (pa1 + pa2)/2
 
+            # cost of staying in the game
+            c = 20 + self.gamma*pa*(4-get_street_num(round_state['street']))*20
+
+            # amount at stake
+            amt_at_stake = round_state['pot']['main']['amount'] + 2*c
+
+            # winning threshold
+            alpha = c/amt_at_stake
+
             if pb <= pa:
-                po = self.alpha + (0.5 - self.alpha)*pb/pa
+                po = alpha + (0.5 - alpha)*pb/pa
             else:
                 po = 0.5 + 0.5*(pb - pa)/(1 - pa)
 
@@ -127,9 +136,7 @@ class MCTSPlayer(BasePokerPlayer):
             else:
                 p = pw + self.gamma*(1-pw)*(0.5 - po)/0.5
             
-            c = 20 + self.gamma*pa*(4-get_street_num(round_state['street']))*20
-            
-            b = p*(round_state['pot']['main']['amount'] + 2*c)
+            b = p*amt_at_stake
 
             if b < c:
                 return 'fold'
