@@ -53,9 +53,12 @@ def checkMatching(values):
 
 
 def checkFlush(card_suits):
-    _, counts = np.unique(card_suits, return_counts=True)
-    counts = np.sort(counts)[::-1]
-    return counts[0] == 5
+    try:
+        _, counts = np.unique(card_suits, return_counts=True)
+        counts = np.sort(counts)[::-1]
+        return counts[0] == 5
+    except RecursionError:
+        return False
 
 def checkStraightFromValue(start_value, values):
     is_flush = True

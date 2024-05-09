@@ -9,7 +9,7 @@ class UninformedPlayer(BasePokerPlayer):
         type_of_hand = handType(hand)
         # print(hand, type_of_hand)
         threshold = type_of_hand*100
-        print(round_state['pot']['main']['amount'], threshold, hand, type_of_hand)
+        # print(round_state['pot']['main']['amount'], threshold, hand, type_of_hand)
         for action in valid_actions:
             if round_state['pot']['main']['amount'] < threshold or (round_state['street'] == 'preflop' and type_of_hand == 2):
                 if 'raise' == action['action']:
