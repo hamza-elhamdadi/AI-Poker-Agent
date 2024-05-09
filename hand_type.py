@@ -81,22 +81,23 @@ def handType(hand):
     values = [v[1] for v in cards]
 
     # print(cards)
+
+    if len(hand) > 2:
     
-    if checkFlush(card_suits) and checkStraightFromValue(10, values) and 10 in values:
-        # print('has a royal flush')
-        return ROYAL_FLUSH
-        
-    if checkFlush(card_suits) and checkStraight(values):
-        # print('has a straight flush')
-        return STRAIGHT_FLUSH
+        if checkFlush(card_suits) and checkStraightFromValue(10, values) and 10 in values:
+            # print('has a royal flush')
+            return ROYAL_FLUSH
+            
+        if checkFlush(card_suits) and checkStraight(values):
+            # print('has a straight flush')
+            return STRAIGHT_FLUSH
 
-    if checkStraight(values):
-        # print('has a straight')
-        return STRAIGHT
+        if checkStraight(values):
+            # print('has a straight')
+            return STRAIGHT
 
-    if checkFlush(card_suits):
-        # print('has a flush')
-        return FLUSH
+        if checkFlush(card_suits):
+            # print('has a flush')
+            return FLUSH
 
     return checkMatching(values)
-    
