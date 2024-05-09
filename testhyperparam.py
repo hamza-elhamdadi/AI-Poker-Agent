@@ -72,7 +72,7 @@ if __name__ == '__main__':
     table = []
     head = ['alpha', 'gamma', 'loss', 'number of opponent raises', 'number of opponent calls']
     for gamma in range(11):
-        for alpha in range(11):
+        for alpha in range(6):
             loss, Nr, Nc = testhyperparam('MCTS', 'Raised', alpha*0.1, gamma*0.1)
             table.append([gamma, alpha, loss, Nr, Nc])
         

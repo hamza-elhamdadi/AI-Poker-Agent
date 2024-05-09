@@ -5,6 +5,7 @@ setup_config = game.setup_config
 start_poker = game.start_poker
 import time
 from argparse import ArgumentParser
+from tqdm import tqdm
 
 
 """ =========== *Remember to import your agent!!! =========== """
@@ -35,17 +36,17 @@ def testperf(agent_name1, agent_name2):
 	config = setup_config(max_round=max_round, initial_stack=initial_stack, small_blind_amount=smallblind_amount)
 	
 	our_player = MCTSPlayer()
+	opponent_player = RaisedPlayer()
 
 	# Register players
 	config.register_player(name=agent_name1, algorithm=our_player)
-	config.register_player(name=agent_name2, algorithm=RaisedPlayer())
+	config.register_player(name=agent_name2, algorithm=opponent_player)
 	# config.register_player(name=agent_name1, algorithm=agent1())
 	# config.register_player(name=agent_name2, algorithm=agent2())
 	
 
 	# Start playing num_game games
-	for game in range(1, num_game+1):
-		print("Game number: ", game)
+	for game in tqdm(range(1, num_game+1)):
 		game_result = start_poker(config, verbose=0)
 		agent1_pot = agent1_pot + game_result['players'][0]['stack']
 		agent2_pot = agent2_pot + game_result['players'][1]['stack']
@@ -67,7 +68,8 @@ def testperf(agent_name1, agent_name2):
 	else:
 		print("\n It's a draw!") 
 
-	print(our_player.Nr, our_player.Nc)
+	print('opponent',our_player.Nr, our_player.Nc)
+	print('our', opponent_player.Nr, opponent_player.Nc)
 
 
 def parse_arguments():

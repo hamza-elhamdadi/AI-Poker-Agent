@@ -111,8 +111,9 @@ class MCTSPlayer(BasePokerPlayer):
                 pw = win_rates[type_of_hand-1]
                 # print('river time:', time.time() - start)
                 pa2, pb = compute_raise_rate(self, round_state['action_histories'], 'river', opponent_uuid)
-            pa1 = 0.3
-            # pa2 = pb
+            
+            # trained from MCTSPlayer vs MCTSPlayer
+            pa1 = 0.44417431136246915
 
             pa = (pa1 + pa2)/2
 
