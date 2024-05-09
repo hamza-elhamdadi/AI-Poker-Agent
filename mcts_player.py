@@ -68,15 +68,14 @@ def get_street_num(street):
 
 class MCTSPlayer(BasePokerPlayer):
     
-    def __init__(self):
+    def __init__(self, alpha=0.3, gamma=0.5):
         self.Nc = 0
         self.Nr = 0
+        self.alpha = alpha
+        self.gamma = gamma
 
 
     def declare_action(self, valid_actions, hole_card, round_state):
-        # print(round_state['action_histories'])
-        # print(round_state['seats'])
-        # print(self.uuid)
         opponent_uuid = ''
         for seat in round_state['seats']:
             if seat['uuid'] != self.uuid:
@@ -112,26 +111,22 @@ class MCTSPlayer(BasePokerPlayer):
                 pw = win_rates[type_of_hand-1]
                 # print('river time:', time.time() - start)
                 pa2, pb = compute_raise_rate(self, round_state['action_histories'], 'river', opponent_uuid)
-
-            alpha = 0.3
-            gamma = 0.5
-
             pa1 = 0.3
             # pa2 = pb
 
             pa = (pa1 + pa2)/2
 
             if pb <= pa:
-                po = alpha + (0.5 - alpha)*pb/pa
+                po = self.alpha + (0.5 - self.alpha)*pb/pa
             else:
                 po = 0.5 + 0.5*(pb - pa)/(1 - pa)
 
             if po >= 0.5:
-                p = pw - gamma*pw*(po - 0.5)/0.5
+                p = pw - self.gamma*pw*(po - 0.5)/0.5
             else:
-                p = pw + gamma*(1-pw)*(0.5 - po)/0.5
+                p = pw + self.gamma*(1-pw)*(0.5 - po)/0.5
             
-            c = 20 + gamma*pa*(4-get_street_num(round_state['street']))*20
+            c = 20 + self.gamma*pa*(4-get_street_num(round_state['street']))*20
             
             b = p*(round_state['pot']['main']['amount'] + 2*c)
 
