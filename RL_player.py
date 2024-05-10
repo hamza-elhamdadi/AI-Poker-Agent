@@ -19,7 +19,7 @@ pd.options.mode.chained_assignment = None
 
 class RLPlayer(BasePokerPlayer):
 
-    def __init__(self, epsilon=0, isTraining=False):
+    def __init__(self, epsilon=0, isTraining=False, inFile='qtable_vs_all.csv'):
         # action counts / for tracking player states
         self.raises = 0
         self.calls = 0
@@ -30,7 +30,7 @@ class RLPlayer(BasePokerPlayer):
         self.last_round_keys = []
         self.starting_pot = 1000
         self.last_pot = 0
-        self.input_fname = 'RL_models/qtable_vs_uninformed.csv'
+        self.input_fname = 'RL_models/'+inFile
         self.output_fname = 'RL_models/qtable_trained.csv'
         self.qtable = pd.read_csv(self.input_fname)
         
