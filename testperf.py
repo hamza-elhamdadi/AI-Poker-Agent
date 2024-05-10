@@ -13,7 +13,7 @@ from tqdm import tqdm
 """ =========== *Remember to import your agent!!! =========== """
 from randomplayer import RandomPlayer
 from raise_player import RaisedPlayer
-from mcts_player import MCTSPlayer
+from Group7Player import Group7Player
 
 # from smartwarrior import SmartWarrior
 """ ========================================================= """
@@ -43,8 +43,8 @@ def testperf(agent_name1, agent_name2):
         small_blind_amount=smallblind_amount,
     )
 
-    our_player = MCTSPlayer()
-    opponent_player = MCTSPlayer()
+    our_player = Group7Player()
+    opponent_player = Group7Player()
 
     # Register players
     config.register_player(name=agent_name1, algorithm=our_player)

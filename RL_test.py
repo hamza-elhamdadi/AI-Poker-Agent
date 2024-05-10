@@ -3,13 +3,13 @@ from randomplayer import RandomPlayer
 from raise_player import RaisedPlayer
 from uninformed_player import UninformedPlayer
 from RL_player import RLPlayer
-from mcts_player import MCTSPlayer
+from Group7Player import Group7Player
 from init_qtable import gen_table
 import matplotlib.pyplot as plt
 
 load = '|/-\\'
 NUM_GAMES = 100
-# opp = MCTSPlayer(gamma=0.7)
+# opp = Group7Player(gamma=0.7)
 def play(trained_name, opp_name, opp):
     # gen_table('qtable_trained.csv')
     win_rates = []
@@ -28,7 +28,7 @@ def play(trained_name, opp_name, opp):
     win_rate = wins / NUM_GAMES * 100
     print()
 
-agents = {'uninformed': UninformedPlayer(), 'raised': RaisedPlayer(), 'mcts': MCTSPlayer(gamma=0.7)}
+agents = {'uninformed': UninformedPlayer(), 'raised': RaisedPlayer(), 'mcts': Group7Player(gamma=0.7)}
 for trained_on_name in agents:
     for opp_name in agents:
         print(f'Trained on {trained_on_name} against {opp_name}')

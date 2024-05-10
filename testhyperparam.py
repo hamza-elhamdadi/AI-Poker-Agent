@@ -10,7 +10,7 @@ from tqdm import tqdm
 """ =========== *Remember to import your agent!!! =========== """
 from randomplayer import RandomPlayer
 from raise_player import RaisedPlayer
-from mcts_player import MCTSPlayer
+from Group7Player import Group7Player
 # from smartwarrior import SmartWarrior
 """ ========================================================= """
 
@@ -34,8 +34,8 @@ def testhyperparam(agent_name1, agent_name2, gamma1, gamma2):
     # Setting configuration
     config = setup_config(max_round=max_round, initial_stack=initial_stack, small_blind_amount=smallblind_amount)
 
-    our_player = MCTSPlayer(gamma=gamma1)
-    opponent_player = MCTSPlayer(gamma=gamma2)
+    our_player = Group7Player(gamma=gamma1)
+    opponent_player = Group7Player(gamma=gamma2)
 
     # Register players
     config.register_player(name=agent_name1, algorithm=our_player)

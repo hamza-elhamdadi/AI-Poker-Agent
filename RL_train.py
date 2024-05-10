@@ -3,14 +3,14 @@ from randomplayer import RandomPlayer
 from raise_player import RaisedPlayer
 from uninformed_player import UninformedPlayer
 from RL_player import RLPlayer
-from mcts_player import MCTSPlayer
+from Group7Player import Group7Player
 from init_qtable import gen_table
 import matplotlib.pyplot as plt
 
 load = '|/-\\'
 NUM_GAMES_PER_BATCH = 50
 NUM_BATCHES = 50
-opp = MCTSPlayer(gamma=0.7)
+opp = Group7Player(gamma=0.7)
 gen_table('qtable_trained.csv')
 win_rates = []
 config = setup_config(max_round=100, initial_stack=1000, small_blind_amount=10)
@@ -31,7 +31,7 @@ for batch in range(NUM_BATCHES):
     win_rate = wins / NUM_GAMES_PER_BATCH * 100
     win_rates.append(win_rate)
 print()
-plt.title('Win-rate of RL agent against MCTSPlayer')
+plt.title('Win-rate of RL agent against Group7Player')
 plt.xlabel('batches')
 plt.ylabel('percent of games won')
 plt.plot(win_rates)

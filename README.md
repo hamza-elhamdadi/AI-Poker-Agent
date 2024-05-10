@@ -1,3 +1,5 @@
+Code for Final Project - Hamza Elhamdadi, Cuong Than, Tianci Xie, Hyuk-Je Kwon
+
 # Our Submitted agent
 
 To load our agent use the following code
