@@ -19,7 +19,7 @@ pd.options.mode.chained_assignment = None
 
 class RLPlayer(BasePokerPlayer):
 
-    def __init__(self, epsilon=0):
+    def __init__(self, epsilon=0, isTraining=False):
         # action counts / for tracking player states
         self.raises = 0
         self.calls = 0
@@ -30,10 +30,9 @@ class RLPlayer(BasePokerPlayer):
         self.last_round_keys = []
         self.starting_pot = 1000
         self.last_pot = 0
-        self.input_fname = 'RL_models/qtable_trained.csv'
+        self.input_fname = 'RL_models/qtable_vs_uninformed.csv'
         self.output_fname = 'RL_models/qtable_trained.csv'
         self.qtable = pd.read_csv(self.input_fname)
-        self.last_q_value = 0
         
         # hyperparams
         self.AF_THRESH = 25
@@ -42,10 +41,9 @@ class RLPlayer(BasePokerPlayer):
         self.gamma = 0.5  # discount rate in [0, 1]
         self.epsilon = epsilon  # for epsilon-greedy training
         
-        self.isTraining = True
+        self.isTraining = isTraining
     
     def declare_action(self, valid_actions, hole_card, round_state):
-        r = random.random()
         this_street = round_state['street']
         street_num = ['preflop', 'flop', 'turn', 'river'].index(this_street)
         hand = hole_card + round_state['community_card']
