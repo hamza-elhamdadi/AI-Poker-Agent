@@ -4,6 +4,9 @@ To load our agent use the following code
 
 ```from mcts_player import MCTSPlayer```
 
+We have necessary pretrained files in the directory MCTS/params/
+
+as well as additional code dependencies in the file hand_type.py
 
 # Additional files
 
