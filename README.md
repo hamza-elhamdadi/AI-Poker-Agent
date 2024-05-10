@@ -1,10 +1,10 @@
-Code for Final Project - Hamza Elhamdadi, Cuong Than, Tianci Xie, Hyuk-Je Kwon
+Group 7 Code for Final Project - Hamza Elhamdadi, Cuong Than, Tianci Xie, Hyuk-Je Kwon
 
 # Our Submitted agent
 
 To load our agent use the following code
 
-```from mcts_player import MCTSPlayer```
+```from Group7Player import Group7Player```
 
 We have necessary pretrained files in the directory MCTS/params/
 
