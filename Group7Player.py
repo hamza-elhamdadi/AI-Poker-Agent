@@ -79,7 +79,7 @@ def compute_raise_rate(self, action_histories, curr_street, opponent_uuid):
 def get_street_num(street):
     return (street=='preflop') + (street=='flop')*2 + (street=='turn')*3 + (street=='river')*4
 
-class MCTSPlayer(BasePokerPlayer):
+class Group7Player(BasePokerPlayer):
     
     def __init__(self, gamma=0.7):
         self.Nc = 0
