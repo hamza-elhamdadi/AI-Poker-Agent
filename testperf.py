@@ -43,8 +43,8 @@ def testperf(agent_name1, agent_name2):
         small_blind_amount=smallblind_amount,
     )
 
-    our_player = MCTSPlayer(gamma=0.5)
-    opponent_player = RaisedPlayer()
+    our_player = MCTSPlayer()
+    opponent_player = MCTSPlayer()
 
     # Register players
     config.register_player(name=agent_name1, algorithm=our_player)
